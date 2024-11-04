@@ -13,9 +13,24 @@ import java.util.stream.Collectors;
 
 public class TacheControleur implements HttpHandler{
  private List<Tache> TachesSauvegardes;
-  public TacheControleur(){
-      this.TachesSauvegardes=new ArrayList<>();
+
+     TacheService tacheService;
+     ObjectMapper objectMapper;
+
+
+    /*
+     public TacheControleur(TacheService tacheService){
+      //this.TachesSauvegardes=new ArrayList<>();
+        this.tacheService=tacheService;
+        this.objectMapper = new ObjectMapper();
   }
+
+     */
+
+    public TacheControleur(){
+        this.TachesSauvegardes=new ArrayList<>();
+
+    }
 
     // Créez une nouvelle tâche
     Tache nouvelleTache1 = new Tache("Aujourd'hui", "finir TP1",true);
@@ -26,19 +41,18 @@ public class TacheControleur implements HttpHandler{
         String methode = exchange.getRequestMethod();
         String chemin = exchange.getRequestURI().getPath();
 
-        switch (methode){
-            case "GET":
+        switch (methode) {
+            case "GET" -> {
                 if (chemin.equals("/taches")) {
                     rechercherTaches(exchange);
                 }
-                break;
-            case "POST" :
-                if (chemin.equals("/taches/creation")){
+            }
+            case "POST" -> {
+                if (chemin.equals("/taches/creation")) {
                     ajouterTache(exchange);
                 }
-                break;
-            default:
-                exchange.sendResponseHeaders(405, -1);
+            }
+            default -> exchange.sendResponseHeaders(405, -1);
         }
 
     }
@@ -48,13 +62,13 @@ public class TacheControleur implements HttpHandler{
         InputStream tacheJsonRecus = exchange.getRequestBody();
         ObjectMapper monObjectMapper = new ObjectMapper();
 
-        Tache tacheDeserialisee = monObjectMapper.readValue(tacheJsonRecus, Tache.class);
+        TacheDTO tacheDeserialisee = monObjectMapper.readValue(tacheJsonRecus, TacheDTO.class);
         System.out.println(tacheDeserialisee);
 
         System.out.println("Description de la tâche : " + tacheDeserialisee.toString());
 
         // Ajouter la tâche à la liste
-        TachesSauvegardes.add(tacheDeserialisee);
+    //    TachesSauvegardes.add(tacheDeserialisee);
 
         exchange.getResponseHeaders().set("Content-Type", "application/json");
 

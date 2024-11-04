@@ -1,26 +1,19 @@
 package cal335;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class Tache {
-
+public class TacheDTO {
     private String nom;
     private String description;
     private boolean aFaire;
 
     // Constructeur avec paramètres
-    public Tache(String nom, String description, boolean aFaire) {
+    public TacheDTO(String nom, String description, boolean aFaire) {
         this.nom = nom;
         this.description = description;
         this.aFaire = aFaire;
     }
 
     // Constructeur par défaut
-    public Tache() {
+    public TacheDTO() {
     }
 
     // Getters et Setters
@@ -56,5 +49,4 @@ public class Tache {
                 ", aFaire=" + aFaire +
                 '}';
     }
-
 }
