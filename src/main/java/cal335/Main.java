@@ -12,7 +12,9 @@ public class Main {
 
         HttpServer serveur = HttpServer.create(new InetSocketAddress(PORT), 0);
 
-        TacheControleur controleur = new TacheControleur();
+        TacheService tacheService = new TacheService();
+
+        TacheControleur controleur = new TacheControleur(tacheService);
         serveur.createContext("/taches", controleur);
         serveur.setExecutor(null);
 

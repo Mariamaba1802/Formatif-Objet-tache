@@ -1,17 +1,30 @@
 package cal335;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TacheService {
-    private final List<Tache> listeDesTaches = new ArrayList<>();
+    private final HashMap<Boolean, List<Tache>> MapTaches;
 
-    private void ajouterTache() {
-        Tache nouvelleTache = null;
-        listeDesTaches.add(nouvelleTache);
+public TacheService (){
+    this.MapTaches = new HashMap<>();
+    MapTaches.put(true, new ArrayList<>());
+    MapTaches.put(false, new ArrayList<>());
+}
+   public  void ajouterTache(TacheDTO tacheDto) {
+    if (!MapTaches.containsKey(tacheDto.isaFaire())){
+        MapTaches.put(tacheDto.isaFaire(),new ArrayList<>());
     }
-    private void rechercherTaches() {
-        List<Tache> listeDesTaches = this.listeDesTaches;
+        MapTaches.get(tacheDto.isaFaire()).add(TacheMapper.toModel(tacheDto));
+    }
+   public  List<TacheDTO> rechercherTaches() {
+        List<TacheDTO> toutesLesTaches = new ArrayList<>();
+        List<TacheDTO> tacheFait = TacheMapper.versDTOs(MapTaches.get(true));
+        List<TacheDTO> tacheAFaire= TacheMapper.versDTOs(MapTaches.get(false));
+        toutesLesTaches.addAll(tacheAFaire);
+        toutesLesTaches.addAll(tacheFait);
+        return toutesLesTaches;
     }
 }
 
