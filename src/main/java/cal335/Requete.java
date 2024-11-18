@@ -1,32 +1,20 @@
 package cal335;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import cal335.Modele.Tache;
+import cal335.Service.TacheDAO;
 
 public class Requete {
     public static void main(String[] args) {
-        String requete = "SELECT * FROM Tache";
+        Tache tache1 = new Tache("task2","tp2",false);
 
-        try (Connection connexion = ConnexionA_SQLite.obtenirConnexion();
-             Statement statement = connexion.createStatement();
-             ResultSet resultSet = statement.executeQuery(requete)) {
+        //insertion Tache1
+        //TacheDAO.insererTache(tache1);
 
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String nom = resultSet.getString("nom");
-                String description = resultSet.getString("description");
-                boolean aFaire = resultSet.getBoolean("a_faire");
+        //obtenir toutes les taches
+        //TacheDAO.obtenirTaches();
 
-                System.out.println("ID: " + id);
-                System.out.println("Nom: " + nom);
-                System.out.println("Description: " + description);
-                System.out.println("À faire: " + aFaire);
-                System.out.println("---------------------------");
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de l'exécution de la requête : " + e.getMessage());
-        }
+       // TacheDAO.mettreAJourNomTache(1,"mise a jour");
+TacheDAO.supprimerTache(1);
+
     }
 }

@@ -1,4 +1,8 @@
-package cal335;
+package cal335.Service;
+
+import cal335.Modele.Tache;
+import cal335.Modele.TacheDTO;
+import cal335.Modele.TacheMapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,15 +1,15 @@
-package cal335;
+package cal335.Controleur;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import cal335.Service.TacheService;
+import cal335.Modele.Tache;
+import cal335.Modele.TacheDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TacheControleur implements HttpHandler{
  private List<Tache> TachesSauvegardes;

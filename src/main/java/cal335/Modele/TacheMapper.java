@@ -1,4 +1,7 @@
-package cal335;
+package cal335.Modele;
+
+import cal335.Modele.Tache;
+import cal335.Modele.TacheDTO;
 
 import java.util.ArrayList;
 import java.util.List;

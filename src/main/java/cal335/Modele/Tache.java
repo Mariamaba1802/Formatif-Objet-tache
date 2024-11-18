@@ -1,4 +1,4 @@
-package cal335;
+package cal335.Modele;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

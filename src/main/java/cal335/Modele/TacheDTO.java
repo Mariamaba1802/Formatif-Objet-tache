@@ -1,4 +1,4 @@
-package cal335;
+package cal335.Modele;
 
 public class TacheDTO {
     private String nom;
