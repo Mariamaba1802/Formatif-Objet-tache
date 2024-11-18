@@ -1,0 +1,13 @@
+  CREATE TABLE IF NOT EXISTS Tache (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nom TEXT NOT NULL,
+                    description TEXT,
+                    a_faire BOOLEAN NOT NULL,
+                    date_creation TEXT NOT NULL
+                );
+
+
+INSERT INTO Tache (nom, description) VALUES
+('Test 1', 'Description du Test 1'),
+('Test 2', 'Description du Test 2'),
+('Test 3', 'Description du Test 3');
