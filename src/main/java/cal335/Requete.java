@@ -14,7 +14,7 @@ public class Requete {
         //TacheDAO.obtenirTaches();
 
        // TacheDAO.mettreAJourNomTache(1,"mise a jour");
-TacheDAO.supprimerTache(1);
+
 
     }
 }

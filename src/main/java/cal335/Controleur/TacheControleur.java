@@ -4,6 +4,7 @@ package cal335.Controleur;
 import cal335.Service.TacheService;
 import cal335.Modele.Tache;
 import cal335.Modele.TacheDTO;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -42,6 +43,16 @@ public class TacheControleur implements HttpHandler{
             case "POST" -> {
                 if (chemin.equals("/taches/creation")) {
                     ajouterTache(exchange);
+                }
+            }
+            case "DELETE" -> {
+                if (chemin.startsWith("/taches/suppression/")) {
+                    supprimerTache(exchange);
+                }
+            }
+            case "PUT" -> {
+                if (chemin.startsWith("/taches/modification/")) {
+                    modifierNomTache(exchange);
                 }
             }
             default -> exchange.sendResponseHeaders(405, -1);
@@ -84,5 +95,64 @@ public class TacheControleur implements HttpHandler{
         }
 
     }
+    public void supprimerTache(HttpExchange exchange) throws IOException {
 
-}
+            // Récupérer la query string de l'URL
+            String query = exchange.getRequestURI().getQuery();
+
+            // Vérifier que la query string contient un paramètre "id"
+            if (query != null && query.startsWith("id=")) {
+                // Extraire l'ID depuis la query string
+                int id = Integer.parseInt(query.substring(3)); // Récupérer l'ID après "id="
+
+                // Appeler le service pour supprimer la tâche
+                TacheService.supprimerTache(id);
+
+                // Répondre avec succès
+                String responseJson = "{\"message\": \"Tâche supprimée avec succès\"}";
+                exchange.getResponseHeaders().set("Content-Type", "application/json");
+                exchange.sendResponseHeaders(200, responseJson.getBytes().length);
+
+                try (OutputStream os = exchange.getResponseBody()) {
+                    os.write(responseJson.getBytes());
+                }
+
+
+        }
+    }
+
+
+
+    public void modifierNomTache(HttpExchange exchange) throws IOException {
+        // Récupérer l'ID depuis la query string
+        String query = exchange.getRequestURI().getQuery();
+        if (query != null && query.startsWith("id=")) {
+            int id = Integer.parseInt(query.substring(3)); // Extraire l'ID après "id="
+
+            // Lire le corps JSON pour récupérer le nouveau nom
+            InputStream input = exchange.getRequestBody();
+            String body = new String(input.readAllBytes());
+
+            // Désérialiser le JSON pour obtenir le nom
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonRecus = objectMapper.readTree(body);
+            String nouveauNom = jsonRecus.get("nom").asText(); // Récupérer le champ "nom"
+
+            // Appeler le service pour modifier le nom
+            TacheService.modifierNomTache(id, nouveauNom);
+
+            // Répondre avec succès
+            String responseJson = "{\"message\": \"Nom de la tâche modifié avec succès\"}";
+            exchange.getResponseHeaders().set("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, responseJson.getBytes().length);
+
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(responseJson.getBytes());
+            }
+        }
+    }
+
+
+    }
+
+

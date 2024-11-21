@@ -6,15 +6,19 @@ import cal335.Modele.Tache;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TacheDAO {
 
+
     public static void insererTache(Tache tache) {
         String requeteSQL = "INSERT INTO Tache (nom, description,a_faire) VALUES (?, ?, ?)";
+        Connection connexion = GestionnaireConnection.getInstance().obtenirConnexion();
 
         try (
-                Connection connexion = GestionnaireConnection.getInstance().obtenirConnexion();
-                PreparedStatement preparedStatement = connexion.prepareStatement(requeteSQL)) {
+
+                PreparedStatement preparedStatement = connexion.prepareStatement(requeteSQL  )) {
 
             preparedStatement.setString(1, tache.getNom());
            preparedStatement.setString(2, tache.getDescription());
@@ -27,31 +31,37 @@ public class TacheDAO {
         }
     }
 
-    public static void obtenirTaches() {
+    public static List<Tache> obtenirTaches() {
         String requeteSQL = "SELECT * FROM Tache";
+        List<Tache> listeTaches = new ArrayList<>();
 
         try (Connection connexion = GestionnaireConnection.getInstance().obtenirConnexion();
              PreparedStatement preparedStatement = connexion.prepareStatement(requeteSQL);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            System.out.println("---------------------------");
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
+                // Récupérer les données depuis le ResultSet
                 String nom = resultSet.getString("nom");
                 String description = resultSet.getString("description");
-                String a_faire = resultSet.getString("a_faire");
-                System.out.println("ID: " + id + ", Nom: " + nom + ", Description: " + description + " A faire " + a_faire );
+                boolean aFaire = resultSet.getBoolean("a_faire");
+
+                // Créer une instance de Tache
+                Tache tache = new Tache(nom, description, aFaire);
+                listeTaches.add(tache);
             }
-            System.out.println("---------------------------");
         } catch (SQLException e) {
             System.err.println("Erreur lors de la lecture des tâches : " + e.getMessage());
         }
+
+        return listeTaches;
     }
+
 
     public static void mettreAJourNomTache(int id, String nouveauNom) {
         String requeteSQL = "UPDATE Tache SET nom = ? WHERE id = ?";
+        Connection connexion = GestionnaireConnection.getInstance().obtenirConnexion();
 
-        try (Connection connexion = GestionnaireConnection.getInstance().obtenirConnexion();
+        try (
              PreparedStatement preparedStatement = connexion.prepareStatement(requeteSQL)) {
 
             preparedStatement.setString(1, nouveauNom);
@@ -66,8 +76,9 @@ public class TacheDAO {
 
     public static void supprimerTache(int id) {
         String requeteSQL = "DELETE FROM Tache WHERE id = ?";
+        Connection connexion = GestionnaireConnection.getInstance().obtenirConnexion();
 
-        try (Connection connexion = GestionnaireConnection.getInstance().obtenirConnexion();
+        try (
              PreparedStatement preparedStatement = connexion.prepareStatement(requeteSQL)) {
 
             preparedStatement.setInt(1, id);
